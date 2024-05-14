@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GraphicsPanel extends JPanel implements KeyListener, MouseListener {
+public class GraphicsPanel extends JPanel implements KeyListener, MouseListener, ActionListener {
     private BufferedImage background;
     private Player player;
     private Player player2;
@@ -15,18 +15,27 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener 
     private boolean[] pressedKeys;
     private ArrayList<Coin> coins;
     private boolean isPlayer2;
+    private Timer timer;
+    private int time;
 
-    public GraphicsPanel() {
+    public GraphicsPanel(String playerName, String playerName2, boolean rickRoll) {
         try {
-            background = ImageIO.read(new File("final/background.png"));
+            if (rickRoll) {
+                background = ImageIO.read(new File("final/file.png"));
+            } else {
+                background = ImageIO.read(new File("final/background.png"));
+            }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        player = new Player("final/marioleft.png", "final/marioright.png");
-        player2 = new Player("final/luigileft.png", "final/luigiright.png");
+        player = new Player("final/marioleft.png", "final/marioright.png", playerName);
+        player2 = new Player("final/luigileft.png", "final/luigiright.png", playerName2);
         enemy = new Enemy("final/goomba.png");
         coins = new ArrayList<>();
         pressedKeys = new boolean[128]; // 128 keys on keyboard, max keycode is 127
+        time = 0;
+        timer = new Timer(1000, this);
+        timer.start();
         isPlayer2 = true;
         addKeyListener(this);
         addMouseListener(this);
@@ -71,10 +80,11 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener 
         }
         // draw score
         g.setFont(new Font("Courier New", Font.BOLD, 24));
-        g.drawString("Score: " + player.getScore(), 20, 40);
+        g.drawString(player.getName() + "'s score:" + player.getScore(), 20, 40);
         if (isPlayer2) {
-            g.drawString("Score: " + player2.getScore(), 20, 60);
+            g.drawString(player2.getName() + "'s score:" + player2.getScore(), 20, 60);
         }
+        g.drawString("Time: " + time, 20, 80);
         // player moves left (A)
         if (pressedKeys[65]) {
             player.faceLeft();
@@ -162,6 +172,14 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener 
             coins.add(coin);
         } else if (e.getButton() == MouseEvent.BUTTON3) {
             isPlayer2 = !isPlayer2;
+        } else {
+            Point mouseClickLocation = e.getPoint();
+            if (player.playerRect().contains(mouseClickLocation)) {
+                player.turn();
+            }
+            if (player2.playerRect().contains(mouseClickLocation)) {
+                player2.turn();
+            }
         }
     }
 
@@ -172,4 +190,11 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener 
     public void mouseExited(MouseEvent e) {
         enemy.setMOVE_AMT(-(enemy.getMOVE_AMT() / 2) );
     } // unimplemented
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof Timer) {
+            time++;
+        }
+    }
 }

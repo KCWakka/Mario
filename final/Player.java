@@ -12,8 +12,10 @@ public class Player {
     private double xCoord;
     private double yCoord;
     private int score;
+    private String name;
 
-    public Player(String leftImg, String rightImg) {
+    public Player(String leftImg, String rightImg, String name) {
+        this.name = name;
         facingRight = true;
         xCoord = 50; // starting position is (50, 435), right on top of ground
         yCoord = 435;
@@ -24,6 +26,10 @@ public class Player {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getxCoord() {
@@ -90,6 +96,14 @@ public class Player {
             return right;
         } else {
             return left;
+        }
+    }
+
+    public void turn() {
+        if (facingRight) {
+            faceLeft();
+        } else {
+            faceRight();
         }
     }
 
