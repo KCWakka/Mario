@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Enemy {
-    private final double MOVE_AMT = 1;
+    private double MOVE_AMT = 1;
     private BufferedImage enemy;
     private double xCoord;
     private double yCoord;
@@ -17,6 +17,10 @@ public class Enemy {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public double getMOVE_AMT() {
+        return MOVE_AMT;
     }
 
     public int getxCoord() {
@@ -52,6 +56,9 @@ public class Enemy {
         if (yCoord + MOVE_AMT <= 435) {
             yCoord += MOVE_AMT;
         }
+    }
+    public void setMOVE_AMT(double amount) {
+        MOVE_AMT += amount;
     }
     public Rectangle enemyRect() {
         int imageHeight = getEnemyImage().getHeight();

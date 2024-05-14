@@ -165,7 +165,11 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener 
         }
     }
 
-    public void mouseEntered(MouseEvent e) { } // unimplemented
+    public void mouseEntered(MouseEvent e) {
+        enemy.setMOVE_AMT(enemy.getMOVE_AMT());
+    } // unimplemented
 
-    public void mouseExited(MouseEvent e) { } // unimplemented
+    public void mouseExited(MouseEvent e) {
+        enemy.setMOVE_AMT(-(enemy.getMOVE_AMT() / 2) );
+    } // unimplemented
 }
