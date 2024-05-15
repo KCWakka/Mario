@@ -11,6 +11,7 @@ public class WelcomePanel extends JPanel implements ActionListener {
 
     private JTextField textField;
     private JTextField textField2;
+    private JSpinner spinner;
     private JButton submitButton;
     private JButton clearButton;
     private JFrame enclosingFrame;

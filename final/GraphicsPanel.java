@@ -166,20 +166,26 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     } // unimplemented
 
     public void mouseReleased(MouseEvent e) {
+        Point mouseClickLocation = e.getPoint();
+        boolean onCoin = false;
+        int index = 0;
+        for (int i = 0; i < coins.size(); i++) {
+            if (coins.get(i).coinRect().contains(mouseClickLocation)) {
+                onCoin = true;
+                index = i;
+            }
+        }
         if (e.getButton() == MouseEvent.BUTTON1) {  // left mouse click
-            Point mouseClickLocation = e.getPoint();
             Coin coin = new Coin(mouseClickLocation.x, mouseClickLocation.y);
             coins.add(coin);
-        } else if (e.getButton() == MouseEvent.BUTTON3) {
-            isPlayer2 = !isPlayer2;
+        } else if (player.playerRect().contains(mouseClickLocation)) {
+            player.turn();
+        } else if (player2.playerRect().contains(mouseClickLocation)) {
+            player2.turn();
+        } else if (onCoin) {
+            coins.remove(index);
         } else {
-            Point mouseClickLocation = e.getPoint();
-            if (player.playerRect().contains(mouseClickLocation)) {
-                player.turn();
-            }
-            if (player2.playerRect().contains(mouseClickLocation)) {
-                player2.turn();
-            }
+            isPlayer2 = !isPlayer2;
         }
     }
 
